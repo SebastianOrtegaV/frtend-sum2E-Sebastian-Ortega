@@ -80,3 +80,52 @@ Requisitos de estilos
 • Aplicar estilos de hover y focus en los campos del formulario.
 
 -La IA me entregó el formulario base con todos los requerimientos, ya con esto puedo empezar a pedirle a que lo haga mas seguro.
+
+Etapa 3, validaciones js:
+-Para esta etapa, al igual que la anterior, se le entregó a la IA las especificaciones de cómo debian ser las validaciones en cada sección, por lo que se le mandaron específicamente lo que aparece en la evaluación.
+
+prompt4:Ahora necesito aplicar validaciones, deben ejecutarse al hacer submit del formulario e indicar el visualmente el estado de cada campo mediante clases CSS.
+
+Te dejo las especifiaciones de cada sección a continuación:
+Clases CSS para feedback visual
+Define en turnos.css las siguientes clases y aplicalas desde JavaScript:
+• campo-error: borde rojo, fondo rojo muy claro. Indica que el campo tiene un error.
+• campo-ok: borde verde, fondo verde muy claro. Indica que el campo es valido.
+• mensaje-error: texto de error pequeno de color rojo, visible debajo del campo.
+Reglas de validacion por campo
+Seccion 1 - Datos del paciente
+• Nombre y Apellido: obligatorio, solo letras y espacios (incluye tildes y ene). Expresion regular 
+sugerida: /^[a-zA-ZaeiouAEIOUuUnnNN\s]+$/
+• DNI: obligatorio, entre 7 y 8 digitos numericos.
+• Email: obligatorio, formato valido (usar expresion regular).
+• Telefono: obligatorio, formato valido (puede contener +, guiones y espacios, minimo 8 digitos).
+• Fecha de nacimiento: obligatoria, no puede ser una fecha futura, la edad debe estar entre 0 y 120 
+anos.
+Seccion 2 - Datos del turno
+• Especialidad: obligatoria (no puede quedar en la opcion vacia inicial).
+• Medico: obligatorio una vez que la especialidad esta seleccionada. Las opciones del select deben 
+actualizarse dinamicamente al cambiar la especialidad, usando un objeto JavaScript con los 
+medicos de cada especialidad.
+• Tipo de consulta: obligatorio.
+• Fecha del turno: obligatoria, no puede ser una fecha pasada, debe tener al menos 24 horas de 
+anticipacion desde el momento actual, y debe corresponder a un dia de semana (lunes a viernes; 
+rechazar sabados y domingos).
+• Hora del turno: obligatoria, debe estar dentro del horario de atencion (08:00 a 20:00).
+• Modalidad: obligatoria.
+• Plataforma preferida: obligatoria si la modalidad es "Videoconsulta".
+Seccion 3 - Cobertura medica
+• Cobertura: obligatoria.
+Evaluacion Sumativa 2 | Programacion Web | SaludPlus
+Pagina 8 de 10
+• Numero de credencial: obligatorio si la cobertura NO es "Particular". Debe tener al menos 5 
+caracteres alfanumericos.
+• Plan: obligatorio si la cobertura NO es "Particular".
+Seccion 4 - Informacion adicional
+• Como nos conocio: obligatorio si el checkbox de primera visita esta marcado.
+• Motivo de consulta: obligatorio, minimo 20 caracteres.
+• Descripcion de estudios: obligatoria si el checkbox de estudios previos esta marcado; minimo 20 
+caracteres.
+
+-Con esto completado se fue probando cada una de las casillas para ver si funcionaban correctamente
+-Probando cada casilla me pude dar cuenta que todas funcionan correctamente, con los colores pedidos y mostrando alertas si esque no se completaron los campos o se completaron de manera incorrecta.
+

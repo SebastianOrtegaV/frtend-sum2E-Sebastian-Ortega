@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Solicitar Turno - SaludPlus</title>
   <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="turnos.css" />
 </head>
 <body>
   <header class="site-header">
@@ -26,7 +27,7 @@
         <p>Completa el formulario para reservar tu turno en SaludPlus. Todos los campos marcados son obligatorios.</p>
       </div>
       <div class="form-wrapper">
-        <form id="turno-form" class="turno-form">
+        <form id="turno-form" class="turno-form" novalidate>
           <fieldset>
             <legend>Sección 1: Datos del paciente</legend>
             <div class="form-grid">
@@ -317,6 +318,269 @@
       }, 0);
     });
 
+    function isVisible(element) {
+      return !!element && !element.closest('.hidden');
+    }
+
+    function getFormGroup(field) {
+      return field.closest('.form-group') || field.parentElement;
+    }
+
+    function createErrorMessage(field, message) {
+      const group = getFormGroup(field);
+      let error = group.querySelector('.mensaje-error');
+      if (!error) {
+        error = document.createElement('p');
+        error.className = 'mensaje-error';
+        group.appendChild(error);
+      }
+      error.textContent = message;
+    }
+
+    function removeErrorMessage(field) {
+      const group = getFormGroup(field);
+      const error = group.querySelector('.mensaje-error');
+      if (error) {
+        error.remove();
+      }
+    }
+
+    function setFieldState(field, valid, message) {
+      field.classList.remove('campo-error', 'campo-ok');
+      if (valid) {
+        field.classList.add('campo-ok');
+        removeErrorMessage(field);
+      } else {
+        field.classList.add('campo-error');
+        createErrorMessage(field, message);
+      }
+    }
+
+    function validateText(field, regex, emptyMessage, invalidMessage) {
+      const value = field.value.trim();
+      if (!isVisible(field)) {
+        field.classList.remove('campo-error', 'campo-ok');
+        removeErrorMessage(field);
+        return true;
+      }
+      if (!value) {
+        setFieldState(field, false, emptyMessage);
+        return false;
+      }
+      if (!regex.test(value)) {
+        setFieldState(field, false, invalidMessage);
+        return false;
+      }
+      setFieldState(field, true, '');
+      return true;
+    }
+
+    function validateSelect(field, emptyMessage) {
+      if (!isVisible(field)) {
+        field.classList.remove('campo-error', 'campo-ok');
+        removeErrorMessage(field);
+        return true;
+      }
+      if (!field.value) {
+        setFieldState(field, false, emptyMessage);
+        return false;
+      }
+      setFieldState(field, true, '');
+      return true;
+    }
+
+    function validateEmail(field) {
+      const value = field.value.trim();
+      const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!value) {
+        setFieldState(field, false, 'El correo es obligatorio.');
+        return false;
+      }
+      if (!regex.test(value)) {
+        setFieldState(field, false, 'Ingresa un correo válido.');
+        return false;
+      }
+      setFieldState(field, true, '');
+      return true;
+    }
+
+    function validatePhone(field) {
+      const value = field.value.trim();
+      const digits = value.replace(/\D/g, '');
+      const regex = /^[+\d][\d\s-]{7,}$/;
+      if (!value) {
+        setFieldState(field, false, 'El teléfono es obligatorio.');
+        return false;
+      }
+      if (!regex.test(value) || digits.length < 8) {
+        setFieldState(field, false, 'Ingresa un teléfono válido con al menos 8 dígitos.');
+        return false;
+      }
+      setFieldState(field, true, '');
+      return true;
+    }
+
+    function validateBirth(field) {
+      const value = field.value;
+      if (!value) {
+        setFieldState(field, false, 'La fecha de nacimiento es obligatoria.');
+        return false;
+      }
+      const birth = new Date(value + 'T00:00:00');
+      const today = new Date();
+      if (isNaN(birth.getTime())) {
+        setFieldState(field, false, 'Fecha inválida.');
+        return false;
+      }
+      if (birth > today) {
+        setFieldState(field, false, 'La fecha no puede ser futura.');
+        return false;
+      }
+      let age = today.getFullYear() - birth.getFullYear();
+      const monthDiff = today.getMonth() - birth.getMonth();
+      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+        age -= 1;
+      }
+      if (age < 0 || age > 120) {
+        setFieldState(field, false, 'La edad debe estar entre 0 y 120 años.');
+        return false;
+      }
+      setFieldState(field, true, '');
+      return true;
+    }
+
+    function validateDateTurno(field, timeField) {
+      const value = field.value;
+      if (!value) {
+        setFieldState(field, false, 'La fecha del turno es obligatoria.');
+        return false;
+      }
+      const fecha = new Date(value + 'T00:00:00');
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      if (fecha < today) {
+        setFieldState(field, false, 'La fecha no puede ser pasada.');
+        return false;
+      }
+      const day = fecha.getDay();
+      if (day === 0 || day === 6) {
+        setFieldState(field, false, 'El turno debe ser un día hábil (lunes a viernes).');
+        return false;
+      }
+      if (timeField && timeField.value) {
+        const dateTime = new Date(value + 'T' + timeField.value);
+        const minDate = new Date();
+        minDate.setHours(minDate.getHours() + 24);
+        if (dateTime < minDate) {
+          setFieldState(field, false, 'El turno debe solicitarse con al menos 24 horas de anticipación.');
+          return false;
+        }
+      }
+      setFieldState(field, true, '');
+      return true;
+    }
+
+    function validateTimeTurno(field) {
+      const value = field.value;
+      if (!value) {
+        setFieldState(field, false, 'La hora del turno es obligatoria.');
+        return false;
+      }
+      if (value < '08:00' || value > '20:00') {
+        setFieldState(field, false, 'La hora debe estar entre 08:00 y 20:00.');
+        return false;
+      }
+      setFieldState(field, true, '');
+      return true;
+    }
+
+    function validateConditionalText(field, emptyMessage, minChars) {
+      if (!isVisible(field)) {
+        field.classList.remove('campo-error', 'campo-ok');
+        removeErrorMessage(field);
+        return true;
+      }
+      const value = field.value.trim();
+      if (!value) {
+        setFieldState(field, false, emptyMessage);
+        return false;
+      }
+      if (minChars && value.length < minChars) {
+        setFieldState(field, false, `Debe tener al menos ${minChars} caracteres.`);
+        return false;
+      }
+      setFieldState(field, true, '');
+      return true;
+    }
+
+    function validateCredential(field) {
+      if (!isVisible(field)) {
+        field.classList.remove('campo-error', 'campo-ok');
+        removeErrorMessage(field);
+        return true;
+      }
+      const value = field.value.trim();
+      if (!value) {
+        setFieldState(field, false, 'El número de credencial es obligatorio.');
+        return false;
+      }
+      if (!/^[A-Za-z0-9]{5,}$/.test(value)) {
+        setFieldState(field, false, 'Debe tener al menos 5 caracteres alfanuméricos.');
+        return false;
+      }
+      setFieldState(field, true, '');
+      return true;
+    }
+
+    function validateForm(event) {
+      let valid = true;
+      valid = validateText(nombre, /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/, 'El nombre es obligatorio.', 'Solo se permiten letras y espacios.') && valid;
+      valid = validateText(apellido, /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/, 'El apellido es obligatorio.', 'Solo se permiten letras y espacios.') && valid;
+      valid = validateText(dni, /^\d{7,8}$/, 'El DNI es obligatorio.', 'DNI debe tener entre 7 y 8 dígitos.') && valid;
+      valid = validateEmail(email) && valid;
+      valid = validatePhone(telefono) && valid;
+      valid = validateBirth(nacimiento) && valid;
+      valid = validateSelect(especialidad, 'La especialidad es obligatoria.') && valid;
+      valid = especialidadSelect.value ? validateSelect(medico, 'El médico es obligatorio.') && valid : valid;
+      valid = validateSelect(tipoConsulta, 'El tipo de consulta es obligatorio.') && valid;
+      valid = validateDateTurno(fechaTurno, horaTurno) && valid;
+      valid = validateTimeTurno(horaTurno) && valid;
+      valid = validateSelect(modalidad, 'La modalidad es obligatoria.') && valid;
+      valid = validateSelect(plataforma, 'La plataforma es obligatoria para videoconsulta.') && valid;
+      valid = validateSelect(cobertura, 'La cobertura es obligatoria.') && valid;
+      valid = validateCredential(credencial) && valid;
+      valid = validateConditionalText(plan, 'El plan es obligatorio.') && valid;
+      valid = validateSelect(comoNosConocio, 'Este campo es obligatorio.') && valid;
+      valid = validateConditionalText(motivoConsulta, 'El motivo es obligatorio.', 20) && valid;
+      valid = validateConditionalText(descripcionEstudios, 'La descripción es obligatoria.', 20) && valid;
+
+      if (!valid) {
+        event.preventDefault();
+        const firstError = document.querySelector('.campo-error');
+        if (firstError) {
+          firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }
+    }
+
+    const nombre = document.getElementById('nombre');
+    const apellido = document.getElementById('apellido');
+    const dni = document.getElementById('dni');
+    const email = document.getElementById('email');
+    const telefono = document.getElementById('telefono');
+    const nacimiento = document.getElementById('nacimiento');
+    const tipoConsulta = document.getElementById('tipo-consulta');
+    const fechaTurno = document.getElementById('fecha-turno');
+    const horaTurno = document.getElementById('hora-turno');
+    const plataforma = document.getElementById('plataforma');
+    const cobertura = document.getElementById('cobertura');
+    const credencial = document.getElementById('credencial');
+    const plan = document.getElementById('plan');
+    const comoNosConocio = document.getElementById('como-nos-conocio');
+    const motivoConsulta = document.getElementById('motivo-consulta');
+    const descripcionEstudios = document.getElementById('descripcion-estudios');
+
+    turnoForm.addEventListener('submit', validateForm);
     updateDoctorOptions();
     updateVisibility();
   </script>

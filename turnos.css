@@ -1,0 +1,19 @@
+.campo-error {
+  border-color: #dc2626 !important;
+  background-color: #fee2e2 !important;
+}
+
+.campo-ok {
+  border-color: #16a34a !important;
+  background-color: #dcfce7 !important;
+}
+
+.mensaje-error {
+  color: #dc2626;
+  font-size: 0.875rem;
+  margin-top: 0.4rem;
+}
+
+.mensaje-error::before {
+  content: "⚠️ ";
+}
