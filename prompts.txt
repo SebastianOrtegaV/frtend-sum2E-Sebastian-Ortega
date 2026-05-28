@@ -1,0 +1,20 @@
+parte uno, estructura base:
+primer prompt: Necesito hacer una página web sobre una clinica de salud profesional, necesito que posea un "header" con el nombre de la clinica "SaludPlus", que posea un menu de navegación con enlaces a las secciones de la página como inicio, especialidades, medicos, obras sociales y contacto, tambien, el menu debe permanecer visible cuando se hace scroll.
+
+La  seccion "hero" debe tener un color de fondo con degradado, un titulo principal y uno descriptivo; un boton de llamada a a la accion "solicitar turno" que redirija a "turnos.html" e indicadores de confianza, por ehemplo cantidad de especialidades, años de experiencia, pacientes atendidos.
+
+Para las especialidades medicas necesito una grilla con al menos 6 especialidades disponibles, por ejemplo clinica general, cardiologia, pediatria, ginecologia, traumatologia y neurologia; cada especialidad debe mostrar un icono, nombre y breve descripcion, y debe tener un layout implementado con css grid (minimo 3 columnas en pantallas grandes)
+
+Sobre los medicos necesito una seccion con al menos 3 profesionales del equipo médico; cada tarjeta debe inclui nombre completo, especialidad, breve descripcion o fras, un placeholder de imagen y un layout con flexbox
+
+Para las obras sociales necesito una grilla con al menos 6 obras sociales y/o prepagas aceptadas y una presentacion clara con el nombre de cada cobertura
+
+Tambien necesito el contacto y footer con los datos de contacto, direccion telefono email y horario de atencion; tambien u mapa placeholder y footer con derechos reservados y nombre del autor.
+
+-se pidio este prompt ya que contiene los requisitos mínimos de la estructura base.
+
+-me entregó una buena base pero le faltaron especificaciones como la presentacion de la cobertura así que lo pedí en el siguiente prompt
+
+prompt2:en la parte de obras sociales necesito una presentacion clara de cada una sin perder la grilla
+
+-despues de este cambio la IA me entrega una pequeña descripcion según lo que le pedí y queda la estrucutra base lista.
