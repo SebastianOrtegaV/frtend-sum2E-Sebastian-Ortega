@@ -129,3 +129,24 @@ caracteres.
 -Con esto completado se fue probando cada una de las casillas para ver si funcionaban correctamente
 -Probando cada casilla me pude dar cuenta que todas funcionan correctamente, con los colores pedidos y mostrando alertas si esque no se completaron los campos o se completaron de manera incorrecta.
 
+Comportamiento del formulario:
+-Se le pidió directamente a la  IA los comportamientos solicitados:
+Ahora necesito campos adicionales que deben mostrarse y ocultarse dinamicamente mediante js (modificando display: none/display:block):
+
+Medico: se habilita y actualiza sus opciones cuando el usuario selecciona una especialidad.
+• Plataforma preferida: se muestra solo cuando la modalidad seleccionada es "Videoconsulta".
+• Numero de credencial y Plan: se muestran cuando la cobertura es distinta de "Particular".
+• Como nos conocio: se muestra cuando el checkbox de primera visita esta marcado.
+• Descripcion de estudios: se muestra cuando el checkbox de estudios previos esta marcado.
+Manejo del submit
+• Usar preventDefault() para evitar el envio del formulario por defecto.
+• Recorrer todos los campos y aplicar campo-error o campo-ok segun corresponda.
+• Si existe al menos un error, usar element.scrollIntoView({ behavior: "smooth" }) para desplazarse al 
+primer campo invalido.
+• Si todos los campos son validos, mostrar un mensaje de confirmacion en pantalla con un numero de 
+turno generado con Math.random() (formato: TURN-XXXXX, donde X son digitos).
+• El mensaje de confirmacion debe incluir: nombre del paciente, especialidad, fecha y hora del turno, 
+y el numero de turno generado.
+
+-se probaron todas las casillas con el nuevo funcionamiento y funciona corretamente.
+

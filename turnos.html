@@ -248,7 +248,10 @@
     };
 
     function toggleElement(element, visible) {
+      if (!element) return;
       element.classList.toggle('hidden', !visible);
+      // show/hide using display as requested
+      element.style.display = visible ? 'block' : 'none';
       const controls = element.querySelectorAll('input, select, textarea');
       controls.forEach(control => {
         if (visible) {
@@ -257,11 +260,14 @@
           }
         } else {
           control.required = false;
+          // clear value/state when hiding
           if (control.type === 'checkbox') {
             control.checked = false;
           } else {
             control.value = '';
           }
+          control.classList.remove('campo-error', 'campo-ok');
+          removeErrorMessage(control);
         }
       });
     }
@@ -532,7 +538,27 @@
       return true;
     }
 
+    function showConfirmation(data) {
+      let conf = document.getElementById('confirm-box');
+      if (!conf) {
+        conf = document.createElement('div');
+        conf.id = 'confirm-box';
+        conf.className = 'confirm-box';
+        const wrapper = document.querySelector('.form-wrapper');
+        wrapper.insertBefore(conf, wrapper.firstChild);
+      }
+      conf.innerHTML = `
+        <h3>Turno generado: ${data.turno}</h3>
+        <p><strong>Paciente:</strong> ${data.nombre} ${data.apellido}</p>
+        <p><strong>Especialidad:</strong> ${data.especialidad}</p>
+        <p><strong>Fecha:</strong> ${data.fecha} <strong>Hora:</strong> ${data.hora}</p>
+      `;
+      conf.scrollIntoView({ behavior: 'smooth' });
+    }
+
     function validateForm(event) {
+      // prevent default submission as requested
+      event.preventDefault();
       let valid = true;
       valid = validateText(nombre, /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/, 'El nombre es obligatorio.', 'Solo se permiten letras y espacios.') && valid;
       valid = validateText(apellido, /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/, 'El apellido es obligatorio.', 'Solo se permiten letras y espacios.') && valid;
@@ -542,7 +568,7 @@
       valid = validateBirth(nacimiento) && valid;
       valid = validateSelect(especialidad, 'La especialidad es obligatoria.') && valid;
       valid = especialidadSelect.value ? validateSelect(medico, 'El médico es obligatorio.') && valid : valid;
-      valid = validateSelect(tipoConsulta, 'El tipo de consulta es obligatorio.') && valid;
+      valid = validateSelect(tipoConsulta, 'El tipo de consulta es obligatoria.') && valid;
       valid = validateDateTurno(fechaTurno, horaTurno) && valid;
       valid = validateTimeTurno(horaTurno) && valid;
       valid = validateSelect(modalidad, 'La modalidad es obligatoria.') && valid;
@@ -555,12 +581,25 @@
       valid = validateConditionalText(descripcionEstudios, 'La descripción es obligatoria.', 20) && valid;
 
       if (!valid) {
-        event.preventDefault();
         const firstError = document.querySelector('.campo-error');
         if (firstError) {
-          firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          // scroll to first invalid field
+          firstError.scrollIntoView({ behavior: 'smooth' });
         }
+        return false;
       }
+
+      // all valid -> show confirmation with TURN-XXXXX
+      const turnoNum = 'TURN-' + (Math.floor(Math.random() * 90000) + 10000);
+      showConfirmation({
+        turno: turnoNum,
+        nombre: nombre.value.trim(),
+        apellido: apellido.value.trim(),
+        especialidad: especialidadSelect.value,
+        fecha: fechaTurno.value,
+        hora: horaTurno.value
+      });
+      return true;
     }
 
     const nombre = document.getElementById('nombre');

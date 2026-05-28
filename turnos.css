@@ -17,3 +17,16 @@
 .mensaje-error::before {
   content: "⚠️ ";
 }
+
+.confirm-box {
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  background: linear-gradient(180deg, #ecfdf5, #dcfce7);
+  padding: 1rem 1.25rem;
+  border-radius: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.confirm-box h3 {
+  margin: 0 0 0.5rem;
+  color: #065f46;
+}
