@@ -150,3 +150,20 @@ y el numero de turno generado.
 
 -se probaron todas las casillas con el nuevo funcionamiento y funciona corretamente.
 
+-Para finalizar se le pidió a la IA que defina las validaciones con la estructura pedida.
+
+Prompt5:necesito que definas un objeto js con la siguiente estructura:
+Objeto de medicos por especialidad
+Define en validaciones.js un objeto JavaScript con la siguiente estructura (completa con al menos 2 medicos 
+por especialidad):
+const medicosPorEspecialidad = {
+ "clinica": ["Dr. Gomez, Carlos", "Dra. Lopez, Maria"],
+ "cardiologia": ["Dr. Perez, Juan", "Dra. Torres, Ana"],
+ "pediatria": ["Dra. Diaz, Laura", "Dr. Soto, Pablo"],
+ "ginecologia": ["Dra. Romero, Valeria", "Dra. Castro, Elena"],
+ "traumatologia": ["Dr. Ramos, Sergio", "Dr. Herrera, Diego"],
+ "neurologia": ["Dr. Molina, Andres", "Dra. Vargas, Cecilia"]
+};
+
+-La IA agregó un nuevo archivo "validaciones.js" que exporta el objeto "medicosPorEspecialidad"
+-Con esto ya queda una página web médica con su información mostrada en la página home, un formulario para pedir consultas con sus validaciones y una estructura para los médicos.
