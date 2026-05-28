@@ -18,3 +18,65 @@ Tambien necesito el contacto y footer con los datos de contacto, direccion telef
 prompt2:en la parte de obras sociales necesito una presentacion clara de cada una sin perder la grilla
 
 -despues de este cambio la IA me entrega una pequeña descripcion según lo que le pedí y queda la estrucutra base lista.
+
+Etapa 2: Para la siguiente etapa, ya que es solo crear un formulario con la especificaciones dadas, se utilizo los requerimientos de la evaluacion para crear el prompt y para que la IA genere un formulario con todo lo que se pide
+
+prompt3: ahora necesito hacer un formulario en la pagina de "turnos.html" necesito un formulario organizado con la siguiente distribucion:
+Seccion 1: Datos del Paciente
+Campos requeridos:
+a) Nombre (type="text")
+b) Apellido (type="text")
+c) DNI (type="text")
+d) Correo electronico (type="email")
+e) Telefono (type="tel")
+f) Fecha de nacimiento (type="date")
+g) Genero (select): Masculino / Femenino / Otro / Prefiero no especificar
+Seccion 2: Datos del Turno
+Campos requeridos:
+h) Especialidad (select): Clinica General, Cardiologia, Pediatria, Ginecologia, Traumatologia, 
+Neurologia.
+i) Medico (select): Las opciones deben cambiar segun la especialidad seleccionada. Incluye al menos 
+2 medicos por especialidad. Este campo se habilita solo cuando hay una especialidad seleccionada.
+j) Tipo de consulta (select): Primera consulta / Control / Resultado de estudios.
+k) Fecha del turno (type="date").
+l) Hora del turno (type="time").
+m) Modalidad (select): Presencial / Videoconsulta.
+n) Plataforma preferida (select): Zoom / Google Meet / Teams. VISIBLE SOLO si la modalidad es 
+"Videoconsulta".
+Seccion 3: Cobertura Medica
+Campos requeridos:
+o) Cobertura (select): OSDE / Swiss Medical / Galeno / IOMA / Medicus / Sancor Salud / Particular.
+p) Numero de credencial (type="text"): VISIBLE SOLO si la cobertura NO es "Particular".
+q) Plan (type="text"): VISIBLE SOLO si la cobertura NO es "Particular".
+Evaluacion Sumativa 2 | Programacion Web | SaludPlus
+Pagina 6 de 10
+Seccion 4: Informacion Adicional
+Campos requeridos:
+r) Primera visita (type="checkbox"): "Es la primera vez que consulta en SaludPlus". Al marcar esta 
+opcion, se muestra el campo "Como nos conocio".
+s) Como nos conocio (select): Busqueda en internet / Recomendacion de un conocido / Redes 
+sociales / Otro. VISIBLE SOLO si el checkbox anterior esta marcado.
+t) Motivo de consulta (textarea, rows="4"): Descripcion del motivo de la consulta.
+u) Estudios previos (type="checkbox"): "Tiene estudios previos relacionados con la consulta". Al 
+marcar esta opcion, se muestra el campo "Descripcion de estudios".
+v) Descripcion de estudios (textarea, rows="3"): VISIBLE SOLO si el checkbox anterior esta marcado.
+Boton de envio
+• Boton type="submit" con texto "Solicitar Turno".
+• Boton type="reset" con texto "Limpiar formulario".
+
+Y debe cumplir los siguientes requisitos:
+
+Requisitos de estructura HTML
+• Cada campo debe tener su etiqueta <label> con el atributo for correspondiente.
+• Los grupos de campos deben estar dentro de <fieldset> con su respectivo <legend>.
+• Usar los tipos de input correctos (email, tel, date, time, text, checkbox).
+• Agregar atributo placeholder descriptivo donde corresponda.
+• Los campos de la Seccion 2 que dependen de la especialidad deben usar el atributo disabled y 
+cambiar a enabled con JavaScript.
+Requisitos de estilos
+• Formulario centrado en pantalla, con ancho maximo de 800px.
+• Cada seccion (fieldset) debe tener estilos visuales diferenciados (borde, fondo suave).
+• Los campos ocultos deben tener display: none; por defecto en CSS.
+• Aplicar estilos de hover y focus en los campos del formulario.
+
+-La IA me entregó el formulario base con todos los requerimientos, ya con esto puedo empezar a pedirle a que lo haga mas seguro.
